@@ -60,8 +60,8 @@ text-align:center;
 					<td><b>공지</b></td>
 					<td>
 					
-					<form:checkbox path="c_auth" value='0' class="check" id="c_auth1" />일반 글
-					<form:checkbox path="c_auth" name="c_auth" value='1' class="check" id="c_auth2" /> 공지 지정</td>
+					<form:checkbox path="c_auth" value='0'  id="c_auth1" />일반 글
+					<form:checkbox path="c_auth"  value='1'  id="c_auth2" /> 공지 지정</td>
 				
 					
 		</c:if></tr>
