@@ -42,12 +42,6 @@ public class MemberController {
 		return new MemberVO();
 	}
 	
-	//회원등록 폼 호출
-	/*
-	 * @GetMapping("/chatbot/main.do") public String chatbotForm() { //타일스 설정의 식별자
-	 * return "chatbot/main"; }
-	 */
-	
 	//=============회원가입===============//
 	//회원등록 폼 호출
 	@GetMapping("/member/registerUser.do")
