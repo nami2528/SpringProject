@@ -10,7 +10,6 @@ import javax.validation.constraints.Size;
 public class MemberVO {
 	private int mem_num;
 	@Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}")
-	//@Pattern(regexp="^[a-z|A-Z]{3,6}[0-9]{3,6}$")
 	private String id;
 	private int auth;
 	@NotEmpty

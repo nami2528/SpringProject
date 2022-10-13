@@ -26,12 +26,12 @@ import kr.spring.util.PagingUtil;
 public class MemberAdminController {
 	private static final Logger logger = LoggerFactory.getLogger(MemberAdminController.class);
 	
-	private int rowCount=10;
-	private int pageCount=10;	
+	private final int ROW_COUNT = 10;
+	private final int PAGE_COUNT = 10;
 	
 	@Autowired
 	private MemberService memberService;
-	
+		
 	//==========회원목록==========//
 	//전체 회원 조회
 	@RequestMapping("/admin/admin_list.do")
@@ -39,10 +39,8 @@ public class MemberAdminController {
 								@RequestParam(value="keyfield", defaultValue="")String keyfield,
 								@RequestParam(value="keyword", defaultValue="")String keyword,
 								HttpSession session, Model model) {
-		//로그인 정보 불러오기
-		MemberVO user = (MemberVO)session.getAttribute("user");
-		MemberVO admin = memberService.selectMember(user.getMem_num());
-		model.addAttribute("admin", admin);
+		
+		logger.info("<<회원목록 조회 시작>>");
 		
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("keyfield", keyfield);
@@ -54,7 +52,7 @@ public class MemberAdminController {
 		logger.debug("<<count>>: "+count);
 		
 		//페이지 처리
-		PagingUtil page = new PagingUtil(keyfield, keyword, currentPage, count, rowCount, pageCount, "admin_list.do");
+		PagingUtil page = new PagingUtil(keyfield, keyword, currentPage, count, ROW_COUNT, PAGE_COUNT, "admin_list.do");
 		map.put("start", page.getStartRow());
 		map.put("end", page.getEndRow());
 		
@@ -68,6 +66,8 @@ public class MemberAdminController {
 		mav.addObject("list", list);
 		mav.addObject("page", page.getPage());
 		
+		logger.info("<<회원목록 조회 종료>>");
+		
 		return mav;
 	}
 	
@@ -77,10 +77,8 @@ public class MemberAdminController {
 								   @RequestParam(value="keyfield", defaultValue="")String keyfield,
 								   @RequestParam(value="keyword", defaultValue="")String keyword,
 								   HttpSession session, Model model) {
-		//로그인 정보 불러오기
-		MemberVO user = (MemberVO)session.getAttribute("user");
-		MemberVO admin = memberService.selectMember(user.getMem_num());
-		model.addAttribute("admin", admin);
+		
+		logger.info("<<탈퇴회원 조회 시작>>");
 		
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("keyfield", keyfield);
@@ -92,7 +90,7 @@ public class MemberAdminController {
 		logger.debug("<<count>>: "+count);
 
 		//페이지 처리
-		PagingUtil page = new PagingUtil(keyfield, keyword, currentPage, count, rowCount, pageCount, "admin_list.do");
+		PagingUtil page = new PagingUtil(keyfield, keyword, currentPage, count, ROW_COUNT, PAGE_COUNT, "admin_list.do");
 		map.put("start", page.getStartRow());
 		map.put("end", page.getEndRow());
 
@@ -106,41 +104,41 @@ public class MemberAdminController {
 		mav.addObject("list", list);
 		mav.addObject("page", page.getPage());
 
+		logger.info("<<탈퇴회원 조회 종료>>");
+		
 		return mav;
 	}
 
 	//========회원정보수정=========//
 	//회원정보 조회
 	@GetMapping("/admin/admin_detail.do")
-	public String memDetail(@RequestParam int mem_num,Model model,HttpSession session, Model model_2) {
-		//로그인 정보 불러오기
-		MemberVO user = (MemberVO)session.getAttribute("user");
-		MemberVO admin = memberService.selectMember(user.getMem_num());
-		model_2.addAttribute("admin", admin);
+	public String memDetail(@RequestParam int mem_num,Model model,HttpSession session) {
+		
+		logger.info("<<회원상세정보 조회 시작>>");
 		
 		MemberVO memberVO = memberService.selectMember(mem_num);
 		model.addAttribute("memberVO", memberVO);
 
+		logger.info("<<회원상세정보 조회 종료>>");
+		
 		return "admin_memDetail";
 	}
 
-	//회원정보 수정
+	//회원정보(정지,일반,탈퇴) 수정
 	@GetMapping("/admin/admin_modify.do")
-	public String memModiForm(@RequestParam int mem_num,Model model,HttpSession session, Model model_2) {
-		//로그인 정보 불러오기
-		MemberVO user = (MemberVO)session.getAttribute("user");
-		MemberVO admin = memberService.selectMember(user.getMem_num());
-		model_2.addAttribute("admin", admin);
-
+	public String memModiForm(@RequestParam int mem_num,Model model,HttpSession session) {
+		
 		MemberVO memberVO = memberService.selectMember(mem_num);
 		model.addAttribute("memberVO", memberVO);
-
+	
 		return "admin_memModify";
 	}
 
 	//수정 폼에서 전송된 데이터 처리
 	@PostMapping("/admin/admin_update.do")
 	public String submit(MemberVO memberVO, Model model, HttpServletRequest request) {
+		
+		logger.info("<<회원관리등급 수정 시작>>");
 		logger.debug("<<관리자 회원등급 수정>>: "+memberVO);
 
 		//회원정보 수정
@@ -150,6 +148,8 @@ public class MemberAdminController {
 		model.addAttribute("message", "회원등급 수정 완료!");
 		model.addAttribute("url", request.getContextPath()+"/admin/admin_detail.do?mem_num="+memberVO.getMem_num());
 
+		logger.info("<<회원관리등급 수정 종료>>");
+		
 		return "common/resultView";
 	}
 	
